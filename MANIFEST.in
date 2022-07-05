@@ -1,0 +1,4 @@
+include nonebot_plugin_bfinfo/*
+graft nonebot_plugin_bfinfo/bf1/*
+graft nonebot_plugin_bfinfo/bfv/*
+

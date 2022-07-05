@@ -4,10 +4,10 @@ with open("README.md", "r", encoding="utf-8", errors="ignore") as fh:
     long_description = fh.read()
 
 setup(
-    name='nonebot_plugin_firexN',      #这里是pip项目发布的名称
-    version='0.1.5',  #版本号，数值大的会优先被pip
-    keywords = ["pip", "nonebot2", "nonebot", "fire", "nonebot_plugin"],
-    description = "nonebot plugin firexN",
+    name='nonebot_plugin_bfinfo',      # 这里是pip项目发布的名称
+    version='0.0.0',  # 版本号，数值大的会优先被pip
+    keywords = ["pip", "nonebot2", "nonebot", "battlefield", "nonebot_plugin"],
+    description = "nonebot plugin bfinfo",
     long_description = long_description,
     # long_description = "An feature extraction algorithm, improve the FastICA",
     long_description_content_type="text/markdown",
@@ -17,7 +17,7 @@ setup(
         "Operating System :: OS Independent",
     ],
 
-    url = "https://github.com/GC-ZF/nonebot_plugin_firexN",     # 项目相关文件地址，一般是github
+    url = "https://github.com/GC-ZF/nonebot_plugin_bfinfo",     # 项目相关文件地址，一般是github
     author = "zhangshier",
     author_email = "1310446718@qq.com",
 
@@ -31,7 +31,6 @@ setup(
     # install_requires = ["numpy"]          #这个项目需要的第三方库
 
     install_requires=[
-        'nonebot-plugin-apscheduler>=0.1.3',
         'nonebot2>=2.0.0-beta.2',
         'nonebot-adapter-onebot>=2.0.0b1',
         'nonebot-adapter-onebot',
