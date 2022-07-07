@@ -73,3 +73,8 @@ nonebot.load_plugin("nonebot_plugin_bfinfo")
 <div align="center">
   <img height="300px" src="https://test1.jsdelivr.net/gh/GC-ZF/nonebot_plugin_bfinfo/BFV示例图片.png">
 </div>
+## 历史
+
+2022.07.05 成功提交给nonebot2，第一次贡献代码，激动！
+
+2022.07.07 修复win环境下，字体缺失，主要原因是配置了Linux的绝对路径，改为在该插件下直接存放字题文件，避免其它环境再出现问题
