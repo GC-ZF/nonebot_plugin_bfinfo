@@ -26,7 +26,7 @@ filepath = os.path.dirname ( __file__ )
 bf1_imgpath = os.path.join ( filepath, "bf1" )  # bf1图片路径
 bfv_imgpath = os.path.join ( filepath, "bfv" )  # bfv图片路径
 transtxt_path = os.path.join ( filepath, "bf_translate.json" )
-font_path = os.path.join ( filepath, "NotoSansCJK-Black.ttc" )  # 文字样式
+font_path = os.path.join ( filepath, "STXINGKA.TTF" )  # 文字样式
 largefont = ImageFont.truetype ( font_path, 38 )  # 文字大小
 type_dict = {"weapon": "weapons", "vehicle": "vehicles", "class": "classes"}
 
@@ -280,7 +280,7 @@ def draw_img(bfversion):
     list_vehicle = best_vehicles ()  # 最佳载具
     # list_modes = best_gamemodes ()  # 最佳游戏模式
     # 设置字体，如果没有，也可以不设置
-    font = ImageFont.truetype ( f"{filepath}"+"/NotoSansCJK-Black.ttc", 38 )
+    font = ImageFont.truetype ( f"{filepath}" + "/STXINGKA.TTF", 38 )
 
     # 打开背景图片
     imageFile = f"{filepath}" + "/general_bg.jpg"
