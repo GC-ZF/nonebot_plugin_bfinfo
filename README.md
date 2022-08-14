@@ -11,12 +11,13 @@
 
 <p align="center">
   <a href="https://github.com/GC-ZF/nonebot_plugin_bfinfo/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/GC-ZF/nonebot_plugin_bfinfo?style=flat-square" alt="license">
+    <img src="https://img.shields.io/github/license/GC-ZF/nonebot_plugin_bfinfo" alt="license">
   </a>
   <a href="https://pypi.python.org/pypi/nonebot_plugin_bfinfo">
-    <img src="https://img.shields.io/pypi/v/nonebot_plugin_bfinfo?style=flat-square" alt="pypi">
+    <img src="https://img.shields.io/pypi/v/nonebot_plugin_bfinfo" alt="pypi">
   </a>
-  <img src="https://img.shields.io/badge/python-3.7.3+-blue?style=flat-square" alt="python"><br />
+  <img  src="https://visitor-badge.glitch.me/badge?page_id=nonebot_plugin_bfinfo" />
+  <img src="https://img.shields.io/badge/python-3.7.3+-blue" alt="python"><br />
 </p></br>
 
 ## 插件描述
