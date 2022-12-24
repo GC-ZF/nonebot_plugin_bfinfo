@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8", errors="ignore") as fh:
 
 setup(
     name='nonebot_plugin_bfinfo',      # 这里是pip项目发布的名称
-    version='0.0.2',  # 版本号，数值大的会优先被pip
+    version='0.0.3',  # 版本号，数值大的会优先被pip
     keywords = ["pip", "nonebot2", "nonebot", "battlefield", "nonebot_plugin"],
     description = "nonebot plugin bfinfo",
     long_description = long_description,
@@ -31,8 +31,9 @@ setup(
     # install_requires = ["numpy"]          #这个项目需要的第三方库
 
     install_requires=[
-        'nonebot2>=2.0.0-beta.2',
-        'nonebot-adapter-onebot>=2.0.0b1',
-        'nonebot-adapter-onebot',
+        'nonebot2>=2.0.0-beta.4',
+        'nonebot-adapter-onebot>=2.0.0-beta.1',
+        'matplotlib>=3.6.2',
+        'Pillow>=9.3.0'
     ]
 )
