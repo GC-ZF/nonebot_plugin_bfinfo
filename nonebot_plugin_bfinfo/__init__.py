@@ -9,14 +9,14 @@ PIL学习
 https://blog.csdn.net/qq_41780234/article/details/122242664?ops_request_misc=&request_id=&biz_id=102&utm_term=python%E5%B0%86%E6%96%87%E5%AD%97%E5%86%99%E5%9C%A8%E5%9B%BE%E7%89%87%E4%B8%8A&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-1-122242664.142^v24^huaweicloudv2,157^v15^new_3&spm=1018.2226.3001.4187
 '''
 from nonebot.typing import T_State
-from nonebot.adapters.onebot.v11 import Bot, PrivateMessageEvent, GroupMessageEvent, Message
+from nonebot.adapters.onebot.v11 import Bot, Message
 import json
 import io, os
 from PIL import ImageFont, Image, ImageDraw
 import requests
 from pylab import *
-from nonebot import on_command
-from nonebot.adapters.onebot.v11 import MessageSegment
+from nonebot import on_command, get_driver
+from nonebot.adapters.onebot.v11 import MessageSegment, Event
 
 BFIS = on_command ( "BFI", block=True, priority=12 )
 BFVS = on_command ( "BFV", block=True, priority=12 )
@@ -47,14 +47,12 @@ def resize_font(font_size, text_str, limit_width):
     limit_width为给定的长度
     返回内容为PIL.ImageFont.FreeTypeFont对象
     '''
-
     font = ImageFont.truetype ( font_path, font_size )
     font_lenth = font.getsize ( str ( text_str ) )[ 0 ]
     while font_lenth > limit_width:
         font_size -= 1
         font = ImageFont.truetype ( font_path, font_size )
         font_lenth = font.getsize ( text_str )[ 0 ]
-
     return font
 
 
@@ -76,15 +74,12 @@ with open ( transtxt_path, 'r', encoding='utf-8' ) as f:
 # 返回文字内容（除去名称和类型）以及文字内容的长度
 def dict_text_draw_info(select_dict):
     text = ""
-    text_lenth = 0
     for k, v in select_dict.items ():
         if k == "名称" or k == '类型':
             continue
         text += f'{k}:{str ( v )}   '
-
     font = resize_font ( 38, text, 1000 )
     text_lenth = font.getsize ( text.strip () )[ 0 ]
-
     return text, text_lenth
 
 
@@ -145,7 +140,6 @@ def general():
     general_dict[ '等级' ] = get_json[ 'rank' ]
     general_dict[ '游玩时间' ] = seconds_trans ( get_json[ 'secondsPlayed' ] )
     general_dict[ '头像img' ] = get_json[ 'avatar' ]
-
     return general_dict
 
 
@@ -163,7 +157,6 @@ def best_class():
         class_dict[ '时长' ] = seconds_trans ( i[ 'secondsPlayed' ] )
         class_list.append ( class_dict )
     class_list.sort ( key=lambda x: x[ '击杀' ], reverse=True )  # 排序
-
     return class_list
 
 
@@ -186,7 +179,6 @@ def best_weapon():
     # Sidearm_list.extend(i for i in general_weapon_list if i.get('类型') == "Sidearm")
     # Field_kit_list.extend(i for i in general_weapon_list if i.get('类型') == "Field kit")
     # Melee_list.extend(i for i in general_weapon_list if i.get('类型') == "Melee")
-
     return general_weapon_list
 
 
@@ -203,7 +195,6 @@ def best_vehicles():
         vehicle_dict[ '名称' ] = i[ 'vehicleName' ].replace ( '/', '_' )
         vehicle_lsit.append ( vehicle_dict )
     vehicle_lsit.sort ( key=lambda x: x[ '击杀' ], reverse=True )
-
     return vehicle_lsit
 
 
@@ -220,7 +211,6 @@ def best_gamemodes():
         modes_dict[ '名称' ] = i[ 'gamemodeName' ]
         modes_list.append ( modes_dict )
     modes_list.sort ( key=lambda x: x[ '得分' ], reverse=True )
-
     return modes_list
 
 
@@ -352,61 +342,52 @@ def draw_img(bfversion):
     im1.save ( f"{filepath}" + "/record.png" )
 
 
-img_path = 'file:///' + os.path.split ( os.path.realpath ( __file__ ) )[ 0 ] + '/'
-
-
 def send_img(img_name):
-    global img_path
+    img_path = 'file:///' + os.path.split ( os.path.realpath ( __file__ ) )[ 0 ] + '/'
     return MessageSegment.image ( img_path + img_name )
 
 
-@BFIS.handle ()
-async def BFIG(bot: Bot, event: GroupMessageEvent, state: T_State):
-    msg = event.message.extract_plain_text ().replace ( "BFI", "" )
-    # msg += event.message.extract_plain_text ().replace ( " ", "" )
-    if not msg:
-        await BFIS.finish ( "战绩查询+游戏ID" )
-    get_data ( msg, "bf1" )
-    draw_img ( "bf1" )
-    # img="src/plugins/BF1_record/record.png"
-    await BFIS.send ( Message ( '详细数据访问:' + 'https://battlefieldtracker.com/bf1/profile/pc/' + f'{msg}' ) )
-    await BFIS.send ( send_img ( "record.png" ) )
+# 过滤在.env中设置的命令起始符，防止获取QQ消息中的游戏ID错误
+def get_bfID(msg, version):
+    COMMAND_START_TMP = get_driver ().config.command_start
+    for i in COMMAND_START_TMP:
+        msg = msg.replace ( i + version, "" )
+    return msg
 
 
 @BFIS.handle ()
-async def BFIQ(bot: Bot, event: PrivateMessageEvent, state: T_State):
-    msg = event.message.extract_plain_text ().replace ( "BFI", "" )
+async def getBFI(bot: Bot, event: Event, state: T_State):
+    msg = event.message.extract_plain_text ()
+    msg = get_bfID ( msg, 'BFI' )
+    # 空值
     if not msg:
         await BFIS.finish ( "战绩查询+游戏ID" )
-    get_data ( msg, "bf1" )
-    draw_img ( "bf1" )
-    # img="src/plugins/BF1_record/record.png"
-    await BFIS.send ( Message ( '详细数据访问:' + 'https://battlefieldtracker.com/bf1/profile/pc/' + f'{msg}' ) )
-    await BFIS.send ( send_img ( "record.png" ) )
-    # pathlib.Path('file_path').as_uri()
+    get_data ( msg, "bf1" )  # 保存图片给本地路径
+    # ID不存在抛出异常
+    try:
+        draw_img ( "bf1" )
+        # img="src/plugins/BF1_record/record.png"
+        await BFIS.send ( Message ( '详细数据访问:' + 'https://battlefieldtracker.com/bf1/profile/pc/' + f'{msg}' ) )
+        await BFIS.send ( send_img ( "record.png" ) )
+        # pathlib.Path('file_path').as_uri()
+    except:
+        await BFIS.send ( Message ( '玩家ID不存在' ) )
 
 
 @BFVS.handle ()
-async def BFVG(bot: Bot, event: GroupMessageEvent, state: T_State):
-    msg = event.message.extract_plain_text ().replace ( "BFV", "" )
-    # msg += event.message.extract_plain_text ().replace ( " ", "" )
+async def getBFV(bot: Bot, event: Event, state: T_State):
+    msg = event.message.extract_plain_text ()
+    msg = get_bfID ( msg, 'BFV' )
+    # 空值
     if not msg:
-        await BFIS.finish ( "战绩查询+游戏ID" )
-    get_data ( msg, "bfv" )
-    draw_img ( "bfv" )
-    # img="src/plugins/BF1_record/record.png"
-    await BFIS.send ( Message ( '详细数据访问:' + 'https://battlefieldtracker.com/bfv/profile/pc/' + f'{msg}' ) )
-    await BFIS.send ( send_img ( "record.png" ) )
-
-
-@BFVS.handle ()
-async def BFVQ(bot: Bot, event: PrivateMessageEvent, state: T_State):
-    msg = event.message.extract_plain_text ().replace ( "BFV", "" )
-    if not msg:
-        await BFIS.finish ( "战绩查询+游戏ID" )
-    get_data ( msg, "bfv" )
-    draw_img ( "bfv" )
-    # img="src/plugins/BF1_record/record.png"
-    await BFIS.send ( Message ( '详细数据访问:' + 'https://battlefieldtracker.com/bfv/profile/pc/' + f'{msg}' ) )
-    await BFIS.send ( send_img ( "record.png" ) )
-    # pathlib.Path('file_path').as_uri()
+        await BFVS.finish ( "战绩查询+游戏ID" )
+    get_data ( msg, "bfv" )  # 保存图片给本地路径
+    # ID不存在抛出异常
+    try:
+        draw_img ( "bfv" )
+        # img="src/plugins/BF1_record/record.png"
+        await BFVS.send ( Message ( '详细数据访问:' + 'https://battlefieldtracker.com/bfv/profile/pc/' + f'{msg}' ) )
+        await BFVS.send ( send_img ( "record.png" ) )
+        # pathlib.Path('file_path').as_uri()
+    except:
+        await BFVS.send ( Message ( '玩家ID不存在' ) )

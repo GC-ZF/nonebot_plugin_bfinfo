@@ -81,7 +81,7 @@ nonebot.load_plugin("nonebot_plugin_bfinfo")
 
 2022.07.08 修复win环境下，字体缺失，主要原因是配置了Linux的绝对路径，获取文字材质。改为直接在插件中存放**华文行楷.TTF**
 
-
+2023.01.05 [Issues#2](https://github.com/GC-ZF/nonebot_plugin_bfinfo/issues/2)，修复命令起始符导致的游戏ID获取错误
 
 欢迎小🍟入群927254485
 
