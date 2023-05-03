@@ -1,9 +1,3 @@
-"""
-@Author:张时贰
-@Date:2022年07月04日
-@CSDN:张时贰
-@Blog:zhangshier.vip
-"""
 '''
 PIL学习
 https://blog.csdn.net/qq_41780234/article/details/122242664?ops_request_misc=&request_id=&biz_id=102&utm_term=python%E5%B0%86%E6%96%87%E5%AD%97%E5%86%99%E5%9C%A8%E5%9B%BE%E7%89%87%E4%B8%8A&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-1-122242664.142^v24^huaweicloudv2,157^v15^new_3&spm=1018.2226.3001.4187
